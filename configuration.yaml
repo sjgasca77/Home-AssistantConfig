@@ -1,0 +1,124 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Rubi
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 144
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Madrid
+
+# Show links to resources in log and frontend
+introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# The following gives the error
+# ERROR:homeassistant.components.device_tracker.asuswrt:Unexpected SSH error:
+# could not set shell prompt (received: b" unset PROMPT_COMMAND\r\n# PS1='[PEXPECT]\\$
+# '\r\n[PEXPECT]\\$ set prompt='[PEXPECT]\\$ '\r\n[PEXPECT]\\$ ", expected: '\\[PEXPECT\\][\\$\\#] ').
+#device_tracker:
+#  - platform: asuswrt
+#    host: 192.168.1.1
+#    username: admin
+#    password: !secret device_tracker
+device_tracker:
+   - platform: nmap_tracker
+     hosts: 192.168.1.1/24
+     exclude:
+       - 192.168.1.1
+       - 192.168.1.3
+
+# Weather prediction
+sensor:
+  - platform: yr
+  - platform: moon
+  - platform: systemmonitor
+    resources:
+        - type: disk_use_percent
+          arg: /
+        - type: memory_use_percent
+        - type: processor_use
+  - platform: waqi
+    token: !secret waqi_token
+    locations: Rubí (Ca n'Oriol), Catalunya
+# - platform: openweathermap
+#   api_key: !secret openweathermap
+#   forecast:
+#   language: es
+#   monitored_conditions:
+#     - weather
+#     - temperature
+#     - humidity
+#     - pressure
+#     - clouds
+  - platform: wunderground
+    api_key: !secret wunderground_token
+    lang: SP
+    monitored_conditions:
+       - alerts
+       - temp_c
+       - feelslike_c
+       - heat_index_c
+       - temp_high_record_c
+       - temp_low_record_c
+       - precip_today_metric
+       - weather_1d_metric
+       - relative_humidity
+       - UV
+       - weather
+
+# MQTT Broker
+mqtt:
+   broker: m20.cloudmqtt.com
+   port: 11411
+   username: !secret mqtt_user
+   password: !secret mqtt_password
+
+# Text to speech
+tts:
+  - platform: google
+
+# Google cast
+media_player:
+  - platform: cast
+
+group: !include groups.yaml
+automation: !include automations.yaml

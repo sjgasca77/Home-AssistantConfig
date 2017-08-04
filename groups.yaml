@@ -1,0 +1,25 @@
+weather_overview:
+    name: Condiciones actuales
+    entities:
+       - sensor.pws_temp_c
+       - sensor.pws_feelslike_c
+       - sensor.pws_relative_humidity
+       - sensor.pws_heat_index_c
+       - sensor.pws_precip_today_metric
+       - sensor.pws_UV
+       - sensor.pws_temp_high_record_c
+       - sensor.pws_temp_low_record_c
+
+weather_forecast:
+    name: Prevision del tiempo
+    entities:
+       - sensor.pws_weather_1d_metric
+       - sensor.pws_weather
+       - sensor.pws_alerts
+
+system_monitor:
+    name: Estado Raspberry Pi
+    entities:
+       - sensor.systemmonitor_resources_disk_use_percent
+       - sensor.systemmonitor_resources_memory_use_percent
+       - sensor.systemmonitor_resources_processor_use
